@@ -1,9 +1,6 @@
 package com.example.copperadmin.tabformation;
 
 
-
-
-
 import android.app.Activity;
 
 import android.graphics.Color;
@@ -12,11 +9,21 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
 import com.example.copperadmin.tabformation.view.SlidingTabLayout;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+import java.util.logging.Level;
 
 
 public class ActivityFeed extends FragmentActivity {
@@ -24,6 +31,7 @@ public class ActivityFeed extends FragmentActivity {
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
 
+    private OkHttpClient client = new OkHttpClient();
 
 
     @Override
@@ -33,16 +41,19 @@ public class ActivityFeed extends FragmentActivity {
         setContentView(R.layout.activity_activity_feed);
 
 
-        mViewPager = (ViewPager)findViewById(R.id.viewpager);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setAdapter(new ActivityFeedAdapter(fm));
 
-        mSlidingTabLayout = (SlidingTabLayout)findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.tab_title, R.id.title);
         mSlidingTabLayout.setSelectedIndicatorColors(Color.rgb(42, 132, 155));
         mSlidingTabLayout.setViewPager(mViewPager);
-    }
 
+        //Everything is set on the screen but we need to create a request and wait until we get a response and then remove the loading screen and either show the list or error
+        new BackgroundWebRequest().execute("https://www.google.com");
+
+    }
 
     class SamplePagerAdapter extends PagerAdapter {
 
@@ -59,7 +70,7 @@ public class ActivityFeed extends FragmentActivity {
         @Override
         public CharSequence getPageTitle(int position) {
 
-            switch(position){
+            switch (position) {
                 case 0:
                     return "ALL UPDATES";
                 case 1:

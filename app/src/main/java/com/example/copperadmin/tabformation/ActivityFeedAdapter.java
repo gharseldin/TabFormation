@@ -58,10 +58,5 @@ public class ActivityFeedAdapter extends FragmentStatePagerAdapter {
         }
         return "Item " + (position + 1);
     }
-
-    @Override
-    public boolean isViewFromObject(View view, Object o) {
-        return o == view;
-    }
 }
 
